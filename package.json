@@ -11,6 +11,7 @@
   "dependencies": {
     "@react-native-community/netinfo": "11.4.1",
     "expo": "~54.0.12",
+    "expo-build-properties": "~1.0.9",
     "expo-status-bar": "~3.0.8",
     "react": "19.1.0",
     "react-dom": "19.1.0",
@@ -18,5 +19,8 @@
     "react-native-udp": "^4.1.7",
     "react-native-web": "^0.21.0"
   },
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "gh-pages": "^6.3.0"
+  }
 }
