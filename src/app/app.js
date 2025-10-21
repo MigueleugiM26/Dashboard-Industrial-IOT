@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { styles } from "./style";
 import {
   StyleSheet,
   Text,
@@ -6,6 +7,7 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
+  Image
 } from "react-native";
 
 export default function App() {
@@ -14,6 +16,14 @@ export default function App() {
   const [espIP, setEspIP] = useState("192.168.0.149");
   const intervalRef = useRef(null);
 
+  // Criando aqui função para determinar a cor do circulo
+  const getTempColor = () => { 
+    if (data.temp >= 21 && data.temp <= 30) return '#303030';
+    if (data.temp >= 31) return '#ffdf9c';
+    return '#a9eefb'
+  };
+
+  const corDeFundo = getTempColor()
   const POLL_INTERVAL = 5000;
 
   const fetchData = async () => {
@@ -42,63 +52,49 @@ export default function App() {
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : undefined}
-    >
+    > 
+        <View style={styles.view_icon}>
+          <Image style={styles.image}
+            source={require('../../assets/estacio-icon.png')} // Caminho relativo para o ícone
+          />
+
+          <Image style={styles.image}
+            source={require('../../assets/Vector.png')}
+          />
+        </View>
+
+        <View style={styles.view_center}>
+          <View style={[styles.circle, {backgroundColor: corDeFundo}]}></View>
+          <Text style={styles.temperatura}>{data.temp} °C</Text>
+
+        </View>
+
+        <View style={styles.view_informations}>
+          <Text style={styles.label}>Temperatura: {data.temp} °C</Text>
+          <Text style={styles.label}>Umidade: {data.hum} %</Text>
+          <Text style={styles.label}>Luz: {data.light} %</Text>
+          <Text style={styles.label}>Som: {data.sound} dB</Text>
+        </View>
+
+{/*       
       <TextInput
         style={styles.input}
         placeholder="Digite o IP do ESP"
         placeholderTextColor="#888"
         value={espIP}
         onChangeText={(text) => setEspIP(text)}
-      />
+      /> */}
 
-      <Text style={styles.label}>Temperatura: {data.temp} °C</Text>
-      <Text style={styles.label}>Umidade: {data.hum} %</Text>
-      <Text style={styles.label}>Luz: {data.light} %</Text>
-      <Text style={styles.label}>Som: {data.sound} dB</Text>
+     
 
-      {error && (
+      {/* {error && (
         <View style={{ marginTop: 20, alignItems: "center" }}>
           <Text style={styles.error}>⚠️ Falha ao obter dados do sensor</Text>
           <Text style={styles.errorDetails}>{error}</Text>
         </View>
-      )}
+      )} */}
     </KeyboardAvoidingView>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#000",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 20,
-  },
-  input: {
-    width: "80%",
-    height: 40,
-    borderColor: "#0ff",
-    borderWidth: 1,
-    borderRadius: 5,
-    color: "#0ff",
-    paddingHorizontal: 10,
-    marginBottom: 20,
-    textAlign: "center",
-  },
-  label: {
-    color: "#fff",
-    fontSize: 18,
-    marginVertical: 6,
-  },
-  error: {
-    color: "#f00",
-    fontSize: 16,
-    textAlign: "center",
-  },
-  errorDetails: {
-    color: "#f88",
-    fontSize: 14,
-    textAlign: "center",
-    marginTop: 5,
-  },
-});
+
