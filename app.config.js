@@ -29,8 +29,11 @@ module.exports = {
         usesCleartextTraffic: true,
       },
     },
+    scheme: "dashboardindustrial",
     web: {
       favicon: "./assets/favicon.png",
+      
+      bundler: "metro", 
     },
     extra: {
       eas: {

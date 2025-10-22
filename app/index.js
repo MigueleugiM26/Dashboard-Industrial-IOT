@@ -10,13 +10,15 @@ import {
   Image, 
   TouchableOpacity
 } from "react-native";
-import { router } from "expo-router"
+import { useRouter } from "expo-router"
 
 export default function App() {
   const [data, setData] = useState({ temp: 0, hum: 0, light: 0, sound: 0 });
   const [error, setError] = useState(null);
   const [espIP, setEspIP] = useState("192.168.0.149");
   const intervalRef = useRef(null);
+
+  const router = useRouter();
 
   // Criando aqui função para determinar a cor do circulo
   // const getTempColor = () => { 
@@ -63,13 +65,13 @@ export default function App() {
     > 
         <View style={styles.view_icon}>
           <Image style={styles.image}
-            source={require('../../assets/estacio-icon.png')} // Caminho relativo para o ícone
+            source={require('../assets/estacio-icon.png')} // Caminho relativo para o ícone
           />
 
           <TouchableOpacity onPress={handleNext}>
             <Image 
               style={styles.image}
-              source={require('../../assets/Vector.png')}
+              source={require('../assets/Vector.png')}
             />
           </TouchableOpacity>
           
@@ -84,20 +86,20 @@ export default function App() {
         <View style={styles.view_informations}>
           <View style={styles.linhaDeDado}>
             <Image style={styles.icon} 
-            source={require('../../assets/estacio-icon.png')}/>
+            source={require('../assets/estacio-icon.png')}/>
             <Text style={styles.label}>Temperatura</Text>
             <Text style={styles.label}>{data.temp} °C</Text>
             </View> 
           <View style={styles.linhaDeDado}>
             <Image style={styles.icon} 
-            source={require('../../assets/umidade.png')}/>
+            source={require('../assets/umidade.png')}/>
             <Text style={styles.label}>Umidade</Text>
             <Text style={styles.label}>{data.hum} %</Text>
           </View>
 
           <View style={styles.linhaDeDado}>
             <Image style={styles.icon}
-            source={require('../../assets/luminosidade.png')}
+            source={require('../assets/luminosidade.png')}
             />
             <Text style={styles.label}>Luz</Text>
             <Text style={styles.label}>{data.light} %</Text>    
@@ -105,7 +107,7 @@ export default function App() {
 
           <View style={styles.linhaDeDado}>
             <Image style={styles.icon} 
-            source={require('..//..//assets/sound.png')}
+            source={require('../assets/sound.png')}
             />
             <Text style={styles.label}>Som </Text>
             <Text style={styles.label}>{data.sound} dB</Text>
