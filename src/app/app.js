@@ -7,8 +7,10 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
-  Image
+  Image, 
+  TouchableOpacity
 } from "react-native";
+import { router } from "expo-router"
 
 export default function App() {
   const [data, setData] = useState({ temp: 0, hum: 0, light: 0, sound: 0 });
@@ -17,14 +19,20 @@ export default function App() {
   const intervalRef = useRef(null);
 
   // Criando aqui função para determinar a cor do circulo
-  const getTempColor = () => { 
-    if (data.temp >= 21 && data.temp <= 30) return '#303030';
-    if (data.temp >= 31) return '#ffdf9c';
-    return '#a9eefb'
-  };
+  // const getTempColor = () => { 
+  //   if (data.temp >= 21 && data.temp <= 30) return '#303030';
+  //   if (data.temp >= 31) return '#ffdf9c';
+  //   return '#a9eefb'
+  // };
 
-  const corDeFundo = getTempColor()
+
+  function handleNext(){ 
+    router.navigate("/settings")
+  }
+
+  // const corDeFundo = getTempColor()
   const POLL_INTERVAL = 5000;
+
 
   const fetchData = async () => {
     if (!espIP) return;
@@ -58,22 +66,53 @@ export default function App() {
             source={require('../../assets/estacio-icon.png')} // Caminho relativo para o ícone
           />
 
-          <Image style={styles.image}
-            source={require('../../assets/Vector.png')}
-          />
+          <TouchableOpacity onPress={handleNext}>
+            <Image 
+              style={styles.image}
+              source={require('../../assets/Vector.png')}
+            />
+          </TouchableOpacity>
+          
         </View>
 
         <View style={styles.view_center}>
-          <View style={[styles.circle, {backgroundColor: corDeFundo}]}></View>
-          <Text style={styles.temperatura}>{data.temp} °C</Text>
+          <View style={styles.circle}></View>
+          <Text style={styles.textTemperatura}>{data.temp} °C</Text>
 
         </View>
 
         <View style={styles.view_informations}>
-          <Text style={styles.label}>Temperatura: {data.temp} °C</Text>
-          <Text style={styles.label}>Umidade: {data.hum} %</Text>
-          <Text style={styles.label}>Luz: {data.light} %</Text>
-          <Text style={styles.label}>Som: {data.sound} dB</Text>
+          <View style={styles.linhaDeDado}>
+            <Image style={styles.icon} 
+            source={require('../../assets/estacio-icon.png')}/>
+            <Text style={styles.label}>Temperatura</Text>
+            <Text style={styles.label}>{data.temp} °C</Text>
+            </View> 
+          <View style={styles.linhaDeDado}>
+            <Image style={styles.icon} 
+            source={require('../../assets/umidade.png')}/>
+            <Text style={styles.label}>Umidade</Text>
+            <Text style={styles.label}>{data.hum} %</Text>
+          </View>
+
+          <View style={styles.linhaDeDado}>
+            <Image style={styles.icon}
+            source={require('../../assets/luminosidade.png')}
+            />
+            <Text style={styles.label}>Luz</Text>
+            <Text style={styles.label}>{data.light} %</Text>    
+          </View>
+
+          <View style={styles.linhaDeDado}>
+            <Image style={styles.icon} 
+            source={require('..//..//assets/sound.png')}
+            />
+            <Text style={styles.label}>Som </Text>
+            <Text style={styles.label}>{data.sound} dB</Text>
+          </View>
+          
+          
+          
         </View>
 
 {/*       

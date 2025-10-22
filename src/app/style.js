@@ -19,18 +19,24 @@ export const styles = StyleSheet.create({
     height: 40,
   },
 
+  icon: { 
+    width: 40, 
+    height: 40, 
+    tintColor: 'white',
+  },
+
   view_center: { 
     flex: 1, // Aqui vou pegar o conteudo que restou do space-between no centro
     width: '100%', 
-
     justifyContent: 'flex-start', 
     alignItems: 'center',
+    marginTop: 50,
   },
 
   circle: { 
     width: 150, 
     height: 150, 
-    // backgroundColor: '#303030', 
+    backgroundColor: "#303030",
     borderRadius: 75,
     alignItems: 'center',
     justifyContent: 'center'
@@ -38,9 +44,16 @@ export const styles = StyleSheet.create({
 
   view_informations: { 
     flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
+    
   },
+
+  linhaDeDado: { 
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'space-between',
+    marginTop: 6,
+  },
+
   input: {
     width: "80%",
     height: 40,
@@ -57,6 +70,12 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     marginVertical: 6,
   },
+
+  textTemperatura: { 
+    color: "#fff",
+    fontSize: 50,
+    marginTop: 20,
+  },
   error: {
     color: "#f00",
     fontSize: 16,
@@ -68,13 +87,5 @@ export const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 5,
   },
-
-  temperatura: { 
-    color: "#fff",
-    fontSize: 38,
-    marginTop: 10,
-  }
-
-  
 
 })
