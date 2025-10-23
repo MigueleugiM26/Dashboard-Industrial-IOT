@@ -16,14 +16,9 @@ export const styles = StyleSheet.create({
 
   image: { 
     width: 40,
-    height: 40,
+    height: 44,
   },
 
-  icon: { 
-    width: 40, 
-    height: 40, 
-    tintColor: 'white',
-  },
 
   view_center: { 
     flex: 1, // Aqui vou pegar o conteudo que restou do space-between no centro
@@ -33,13 +28,18 @@ export const styles = StyleSheet.create({
     marginTop: 50,
   },
 
-  circle: { 
+  circleClima: { 
     width: 150, 
     height: 150, 
     backgroundColor: "#303030",
     borderRadius: 75,
     alignItems: 'center',
     justifyContent: 'center'
+  },
+
+  iconCircle: { 
+    width: 100,
+    height: 100,
   },
 
   view_informations: { 

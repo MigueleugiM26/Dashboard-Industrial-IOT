@@ -11,6 +11,15 @@ import {
   TouchableOpacity
 } from "react-native";
 import { useRouter } from "expo-router"
+import { Thermometer, Droplet, Lightbulb, AudioLines, Settings } from "lucide-react-native"
+import imgChuva from '../assets/iconesClima/chuva.png'
+import imgLua from '../assets/iconesClima/lua.png'
+import imgNevoa from '../assets/iconesClima/nevoa.png'
+import imgNublado from '../assets/iconesClima/nublado.png'
+import imgSol from '../assets/iconesClima/sol.png'
+import imgTempestade from '../assets/iconesClima/tempestade.png'
+import imgVentoso from '../assets/iconesClima/ventoso.png'
+
 
 export default function App() {
   const [data, setData] = useState({ temp: 0, hum: 0, light: 0, sound: 0 });
@@ -20,16 +29,121 @@ export default function App() {
 
   const router = useRouter();
 
-  // Criando aqui função para determinar a cor do circulo
-  // const getTempColor = () => { 
-  //   if (data.temp >= 21 && data.temp <= 30) return '#303030';
-  //   if (data.temp >= 31) return '#ffdf9c';
-  //   return '#a9eefb'
-  // };
 
+  const ImagensClima = { 
+    'chuva': imgChuva, 
+    'lua': imgLua, 
+    'nevoa': imgNevoa,
+    'nublado': imgNublado,
+    'sol': imgSol, 
+    'tempestade': imgTempestade,
+    'ventoso': imgVentoso,
+    'aguardando': imgChuva,
+  }
+  
+  const getClimaStatus = () => { 
+    const {temp, hum, light, sound} = data;
+    const IS_NIGHT = light < 10; 
+
+    let status;
+    let imageName;
+    let color;
+    let backgroundColor;
+    let backgroundClima;
+    let textColor;
+    let imageKey;
+
+    if (temp == 0 && light == 0) { 
+      return { 
+        status: "Aguardando dados...",
+        imageName: '',
+        backgroundColor: '#000',
+        textColor: 'blue', // #f8fcf7
+        ImageKey: 'aguardando',
+      }
+    }
+    // Tema base: Noite
+    if (IS_NIGHT) { 
+        status = 'Estável (Noite)';
+        // imageName = 'moon'; // Exemplo
+        backgroundColor = '#1f2937'; 
+        backgroundClima = '#303030';
+        textColor = '#FAFFF5';  
+        imageKey = 'lua';  
+    } 
+    else { 
+        status = 'Estável (Dia)';
+        // imageName = 'sun'; 
+        backgroundColor = '#60a5fa'; 
+        textColor = '#111';
+        imageKey = 'sol';     
+    } 
+
+
+    if (temp > 35 && sound > 80) { 
+      status = 'Cinzas'
+      imageName = '';
+      backgroundColor = '#212121'
+      textColor = '#BFBFBF'
+      imageKey = 'cinzas'
+    }
+
+    else if (hum > 85 && light < 20 && sound > 70) { 
+      status = 'Tempestade'
+      imageName = '';
+      backgroundColor = ' #4d2b88'
+      textColor = '#fcfafc'
+      imageKey = 'tempestade'
+    }
+
+    else if (hum > 75 && light < 40) { 
+      status = 'Chuva'
+      imageName = '';
+      backgroundColor = ' #c0d3fe'
+      textColor = '#fcfefe'
+      imageKey = 'chuva'
+    }
+
+    else if (hum > 90 && temp < 15){ 
+      status = 'Nevoa'
+      imageName = '';
+      backgroundColor = ' #2045d4'
+      textColor = '#fdfdff'
+      imageKey = 'nevoa'
+    }
+
+    else if (light > 80 && hum < 50) { 
+      status = 'Ensolarado'
+      imageName = '';
+      backgroundColor = '  #ffa733'
+      textColor = '#f0eee9'
+      imageKey = 'ensolarado'
+    }
+
+    else if (light >= 40 && light <= 80) { 
+      status = 'Nublado'
+      imageName = '';
+      backgroundColor = '  #FAFFF5'
+      textColor = '#637AE8'
+      imageKey = 'nublado'
+    }
+
+    // A ver como irei implementar o vento. Irei fazer depois
+
+    return { 
+      status: status, 
+      imageName: imageName, 
+      primaryColor: color, 
+      textColor: textColor,
+      imageKey: imageKey,
+    }
+  }
+
+  const temaClima = getClimaStatus();
+  const imagemCircleClima = ImagensClima[temaClima.imageKey]
 
   function handleNext(){ 
-    router.navigate("/settings")
+    router.navigate("/settings/settings")
   }
 
   // const corDeFundo = getTempColor()
@@ -69,45 +183,58 @@ export default function App() {
           />
 
           <TouchableOpacity onPress={handleNext}>
-            <Image 
-              style={styles.image}
-              source={require('../assets/Vector.png')}
+            <Settings size={44}
+            color={"white"}
             />
           </TouchableOpacity>
           
         </View>
 
         <View style={styles.view_center}>
-          <View style={styles.circle}></View>
+          <View style={styles.circleClima}>
+            {imagemCircleClima && ( 
+              <Image style={styles.iconCircle}
+                source={imagemCircleClima}
+              />
+            )}
+          </View>
           <Text style={styles.textTemperatura}>{data.temp} °C</Text>
 
         </View>
 
         <View style={styles.view_informations}>
           <View style={styles.linhaDeDado}>
-            <Image style={styles.icon} 
-            source={require('../assets/estacio-icon.png')}/>
+        
+            <Thermometer 
+                size={44}           
+                color="white"       
+                strokeWidth={2} 
+                style={{ marginRight: 10 }} 
+            />
             <Text style={styles.label}>Temperatura</Text>
             <Text style={styles.label}>{data.temp} °C</Text>
             </View> 
           <View style={styles.linhaDeDado}>
-            <Image style={styles.icon} 
-            source={require('../assets/umidade.png')}/>
+            <Droplet size={44} 
+              color={"white"}
+            />
             <Text style={styles.label}>Umidade</Text>
             <Text style={styles.label}>{data.hum} %</Text>
           </View>
 
           <View style={styles.linhaDeDado}>
-            <Image style={styles.icon}
-            source={require('../assets/luminosidade.png')}
-            />
+            <Lightbulb
+              size={44}
+              color={"white"}
+            /> 
             <Text style={styles.label}>Luz</Text>
             <Text style={styles.label}>{data.light} %</Text>    
           </View>
 
           <View style={styles.linhaDeDado}>
-            <Image style={styles.icon} 
-            source={require('../assets/sound.png')}
+            <AudioLines 
+            size={44}
+            color={"white"}
             />
             <Text style={styles.label}>Som </Text>
             <Text style={styles.label}>{data.sound} dB</Text>
