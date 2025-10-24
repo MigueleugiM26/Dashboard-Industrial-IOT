@@ -38,7 +38,7 @@ export default function App() {
     'sol': imgSol, 
     'tempestade': imgTempestade,
     'ventoso': imgVentoso,
-    'aguardando': imgChuva,
+  
   }
   
   const getClimaStatus = () => { 
@@ -57,15 +57,14 @@ export default function App() {
       return { 
         status: "Aguardando dados...",
         imageName: '',
-        backgroundColor: '#000',
-        textColor: 'blue', // #f8fcf7
-        ImageKey: 'aguardando',
+        backgroundColor: '#000', // 
+        textColor: '#f8fcf7', 
+        backgroundClima: '#303030'
       }
     }
     // Tema base: Noite
     if (IS_NIGHT) { 
         status = 'Estável (Noite)';
-        // imageName = 'moon'; // Exemplo
         backgroundColor = '#1f2937'; 
         backgroundClima = '#303030';
         textColor = '#FAFFF5';  
@@ -73,7 +72,6 @@ export default function App() {
     } 
     else { 
         status = 'Estável (Dia)';
-        // imageName = 'sun'; 
         backgroundColor = '#60a5fa'; 
         textColor = '#111';
         imageKey = 'sol';     
@@ -98,7 +96,6 @@ export default function App() {
 
     else if (hum > 75 && light < 40) { 
       status = 'Chuva'
-      imageName = '';
       backgroundColor = ' #c0d3fe'
       textColor = '#fcfefe'
       imageKey = 'chuva'
@@ -106,7 +103,6 @@ export default function App() {
 
     else if (hum > 90 && temp < 15){ 
       status = 'Nevoa'
-      imageName = '';
       backgroundColor = ' #2045d4'
       textColor = '#fdfdff'
       imageKey = 'nevoa'
@@ -114,7 +110,6 @@ export default function App() {
 
     else if (light > 80 && hum < 50) { 
       status = 'Ensolarado'
-      imageName = '';
       backgroundColor = '  #ffa733'
       textColor = '#f0eee9'
       imageKey = 'ensolarado'
@@ -122,7 +117,6 @@ export default function App() {
 
     else if (light >= 40 && light <= 80) { 
       status = 'Nublado'
-      imageName = '';
       backgroundColor = '  #FAFFF5'
       textColor = '#637AE8'
       imageKey = 'nublado'
@@ -174,7 +168,7 @@ export default function App() {
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      style={[styles.container, {backgroundColor: temaClima.backgroundColor}]}
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     > 
         <View style={styles.view_icon}>
@@ -191,7 +185,7 @@ export default function App() {
         </View>
 
         <View style={styles.view_center}>
-          <View style={styles.circleClima}>
+          <View style={[styles.circleClima, {backgroundColor: temaClima.backgroundClima}]}>
             {imagemCircleClima && ( 
               <Image style={styles.iconCircle}
                 source={imagemCircleClima}
