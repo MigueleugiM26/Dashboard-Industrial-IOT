@@ -42,12 +42,18 @@ export const styles = StyleSheet.create({
     height: 100,
   },
 
-  view_informations: { 
+  viewInformationsWeather: { 
     flexDirection: 'column',
+    backgroundColor: '#121212',
+    marginLeft: -20, 
+    marginRight: -20,
+    paddingHorizontal: 20,
+    marginTop: -20,
+    marginBottom: -20,
     
   },
 
-  linhaDeDado: { 
+weatherInformation: { 
     flexDirection: 'row',
     width: '100%',
     justifyContent: 'space-between',

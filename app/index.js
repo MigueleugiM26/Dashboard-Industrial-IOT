@@ -22,7 +22,7 @@ import imgVentoso from '../assets/iconesClima/ventoso.png'
 
 
 export default function App() {
-  const [data, setData] = useState({ temp: 0, hum: 0, light: 0, sound: 0 });
+  const [data, setData] = useState({ temp: 0, hum: 44, light: 85, sound: 0 });
   const [error, setError] = useState(null);
   const [espIP, setEspIP] = useState("192.168.0.149");
   const intervalRef = useRef(null);
@@ -38,7 +38,7 @@ export default function App() {
     'sol': imgSol, 
     'tempestade': imgTempestade,
     'ventoso': imgVentoso,
-  
+    'ensolarado': imgSol,
   }
   
   const getClimaStatus = () => { 
@@ -49,7 +49,9 @@ export default function App() {
     let imageName;
     let color;
     let backgroundColor;
-    let backgroundClima;
+    let backgroundCircle;
+    let backgroundPainelDados;
+    let colorTextDayWeek;
     let textColor;
     let imageKey;
 
@@ -59,16 +61,27 @@ export default function App() {
         imageName: '',
         backgroundColor: '#000', // 
         textColor: '#f8fcf7', 
-        backgroundClima: '#303030'
+        backgroundCircle: '#303030',
+        backgroundPainelDados: '#121212',
+        colorTextDayWeek: '#BFBFBF'
+        
       }
     }
     // Tema base: Noite
     if (IS_NIGHT) { 
         status = 'Estável (Noite)';
-        backgroundColor = '#1f2937'; 
-        backgroundClima = '#303030';
+        // Cor de fundo
+        backgroundColor = '#7d72ff'; 
+        // Area do icone clima
+        backgroundCircle = '#303030';
+        // Cor do painel de dados
+        backgroundPainelDados = '#4c3afd';
+        // Cor do dia da semana
+        colorTextDayWeek = '#fdfdfd';
+        // Cor dos textos
         textColor = '#FAFFF5';  
         imageKey = 'lua';  
+        
     } 
     else { 
         status = 'Estável (Dia)';
@@ -80,44 +93,61 @@ export default function App() {
 
     if (temp > 35 && sound > 80) { 
       status = 'Cinzas'
-      imageName = '';
-      backgroundColor = '#212121'
-      textColor = '#BFBFBF'
-      imageKey = 'cinzas'
+      backgroundColor = '#212121';
+      textColor = '#BFBFBF';
+      backgroundCircle = '#303030'
+      backgroundPainelDados = '#121212'
+      colorTextDayWeek = '#BFBFBF'
+      imageKey = 'cinzas';
     }
 
     else if (hum > 85 && light < 20 && sound > 70) { 
       status = 'Tempestade'
-      imageName = '';
-      backgroundColor = ' #4d2b88'
-      textColor = '#fcfafc'
-      imageKey = 'tempestade'
+      backgroundColor = ' #0d0727';
+      backgroundCircle = '#0d0826';
+      backgroundPainelDados = '#301179'
+      colorTextDayWeek = '#c2c0ca'
+      textColor = '#fcfafc';
+      imageKey = 'tempestade';
     }
 
     else if (hum > 75 && light < 40) { 
       status = 'Chuva'
       backgroundColor = ' #c0d3fe'
       textColor = '#fcfefe'
-      imageKey = 'chuva'
+      backgroundCircle = '#fefdfe';
+      backgroundPainelDados = '#94b3ff';
+      colorTextDayWeek = '#98aeec';
+      textColor = '#fcfefe';
+      imageKey = 'chuva';
     }
 
     else if (hum > 90 && temp < 15){ 
       status = 'Nevoa'
-      backgroundColor = ' #2045d4'
-      textColor = '#fdfdff'
-      imageKey = 'nevoa'
+      backgroundColor = ' #2045d4';
+      backgroundCircle = '#0d0826';
+      backgroundPainelDados = '#1021ca'
+      colorTextDayWeek = '#fffffd';
+      textColor = '#fdfdff';
+      imageKey = 'nevoa';
     }
 
     else if (light > 80 && hum < 50) { 
       status = 'Ensolarado'
-      backgroundColor = '  #ffa733'
-      textColor = '#f0eee9'
-      imageKey = 'ensolarado'
+      backgroundColor = '#ffa733';
+      backgroundCircle = '#fdfefd';
+      backgroundPainelDados = '#ff8937';
+      colorTextDayWeek = '#e5a85d';
+      textColor = '#f0eee9';
+      imageKey = 'ensolarado';
     }
 
     else if (light >= 40 && light <= 80) { 
-      status = 'Nublado'
-      backgroundColor = '  #FAFFF5'
+      status = 'Nublado';
+      backgroundColor = '#FAFFF5';
+      backgroundCircle = '#fefdfe';
+      backgroundPainelDados = '#E7ECFF';
+      colorTextDayWeek = '#637AE8';
       textColor = '#637AE8'
       imageKey = 'nublado'
     }
@@ -129,6 +159,10 @@ export default function App() {
       imageName: imageName, 
       primaryColor: color, 
       textColor: textColor,
+      backgroundColor: backgroundColor,
+      backgroundCircle: backgroundCircle, 
+      backgroundPainelDados: backgroundPainelDados,
+      colorTextDayWeek: colorTextDayWeek,
       imageKey: imageKey,
     }
   }
@@ -185,19 +219,19 @@ export default function App() {
         </View>
 
         <View style={styles.view_center}>
-          <View style={[styles.circleClima, {backgroundColor: temaClima.backgroundClima}]}>
+          <View style={[styles.circleClima, {backgroundColor: temaClima.backgroundCircle}]}>
             {imagemCircleClima && ( 
               <Image style={styles.iconCircle}
                 source={imagemCircleClima}
               />
             )}
           </View>
-          <Text style={styles.textTemperatura}>{data.temp} °C</Text>
+          <Text style={[styles.textTemperatura, {color: temaClima.textColor}]}>{data.temp} °C</Text>
 
         </View>
 
-        <View style={styles.view_informations}>
-          <View style={styles.linhaDeDado}>
+        <View style={[styles.viewInformationsWeather, {backgroundColor: temaClima.backgroundPainelDados}]}>
+          <View style={styles.weatherInformation}>
         
             <Thermometer 
                 size={44}           
@@ -205,33 +239,33 @@ export default function App() {
                 strokeWidth={2} 
                 style={{ marginRight: 10 }} 
             />
-            <Text style={styles.label}>Temperatura</Text>
-            <Text style={styles.label}>{data.temp} °C</Text>
+            <Text style={[styles.label, {color: temaClima.textColor}]}>Temperatura</Text>
+            <Text style={[styles.label, {color: temaClima.textColor}]}>{data.temp} °C</Text>
             </View> 
-          <View style={styles.linhaDeDado}>
+          <View style={styles.weatherInformation}>
             <Droplet size={44} 
               color={"white"}
             />
-            <Text style={styles.label}>Umidade</Text>
-            <Text style={styles.label}>{data.hum} %</Text>
+            <Text style={[styles.label, {color: temaClima.textColor}]}>Umidade</Text>
+            <Text style={[styles.label, {color: temaClima.textColor}]}>{data.hum} %</Text>
           </View>
 
-          <View style={styles.linhaDeDado}>
+          <View style={styles.weatherInformation}>
             <Lightbulb
               size={44}
               color={"white"}
             /> 
-            <Text style={styles.label}>Luz</Text>
-            <Text style={styles.label}>{data.light} %</Text>    
+            <Text style={[styles.label, {color: temaClima.textColor}]}>Luz</Text>
+            <Text style={[styles.label, {color: temaClima.textColor}]}>{data.light} %</Text>    
           </View>
 
-          <View style={styles.linhaDeDado}>
+          <View style={styles.weatherInformation}>
             <AudioLines 
             size={44}
             color={"white"}
             />
-            <Text style={styles.label}>Som </Text>
-            <Text style={styles.label}>{data.sound} dB</Text>
+            <Text style={[styles.label, {color: temaClima.textColor}]}>Som </Text>
+            <Text style={[styles.label, {color: temaClima.textColor}]}>{data.sound} dB</Text>
           </View>
           
           
