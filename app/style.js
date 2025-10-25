@@ -22,10 +22,12 @@ export const styles = StyleSheet.create({
 
   view_center: { 
     flex: 1, // Aqui vou pegar o conteudo que restou do space-between no centro
+    flexDirection: 'column',
     width: '100%', 
-    justifyContent: 'flex-start', 
     alignItems: 'center',
     marginTop: 50,
+
+
   },
 
   circleClima: { 
@@ -42,13 +44,31 @@ export const styles = StyleSheet.create({
     height: 100,
   },
 
+
+  viewDayWeek: { 
+    // flex: 1, 
+    flexDirection: 'column',
+    // height: '%',
+    // width: '100%',
+    alignItems: 'center',
+    position: 'absolute',
+    bottom: 0,
+     
+  },
+
+  textDayWeek: { 
+    color: "#fff",
+    fontSize: 18,
+   
+  },
+
   viewInformationsWeather: { 
     flexDirection: 'column',
     backgroundColor: '#121212',
     marginLeft: -20, 
     marginRight: -20,
     paddingHorizontal: 20,
-    marginTop: -20,
+    // marginTop: -20,
     marginBottom: -20,
     
   },
@@ -57,7 +77,7 @@ weatherInformation: {
     flexDirection: 'row',
     width: '100%',
     justifyContent: 'space-between',
-    marginTop: 6,
+    marginTop: 5,
   },
 
   input: {

@@ -29,7 +29,7 @@ export default function App() {
 
   const router = useRouter();
 
-
+  
   const ImagensClima = { 
     'chuva': imgChuva, 
     'lua': imgLua, 
@@ -39,6 +39,21 @@ export default function App() {
     'tempestade': imgTempestade,
     'ventoso': imgVentoso,
     'ensolarado': imgSol,
+  }
+
+  const fixBackgroundClima = () => { 
+    const {temp} = data
+    if (temp <= 21 && temp <= 12) { 
+      return '#303030';
+    }
+
+    else if (temp <= 12)  { 
+      return '#acf2ff';
+    }
+
+    else { 
+      return '#ffdf9c';
+    }
   }
   
   const getClimaStatus = () => { 
@@ -167,8 +182,25 @@ export default function App() {
     }
   }
 
+  const getHours = (hours) => { 
+    const dia = 6; 
+    const noite = 19;
+
+    if (hours >= dia && hours < noite) { 
+      return 'Dia';
+    } else { 
+      return 'Noite';
+    }
+  } 
+
   const temaClima = getClimaStatus();
   const imagemCircleClima = ImagensClima[temaClima.imageKey]
+  const dataAtual = new Date();
+  const horaAtual = dataAtual.getHours();
+  const isDay = getHours(horaAtual);
+
+
+
 
   function handleNext(){ 
     router.navigate("/settings/settings")
@@ -219,17 +251,25 @@ export default function App() {
         </View>
 
         <View style={styles.view_center}>
-          <View style={[styles.circleClima, {backgroundColor: temaClima.backgroundCircle}]}>
-            {imagemCircleClima && ( 
-              <Image style={styles.iconCircle}
-                source={imagemCircleClima}
-              />
-            )}
+          
+          <View>
+            <View style={[styles.circleClima, {backgroundColor: temaClima.backgroundCircle}]}>
+              {imagemCircleClima && ( 
+                <Image style={styles.iconCircle}
+                  source={imagemCircleClima}
+                />
+              )}
+            </View>
           </View>
           <Text style={[styles.textTemperatura, {color: temaClima.textColor}]}>{data.temp} °C</Text>
+          <View style={styles.viewDayWeek}>
+            <Text style={styles.textDayWeek}>{isDay}</Text>
+          </View>
 
         </View>
 
+        
+        
         <View style={[styles.viewInformationsWeather, {backgroundColor: temaClima.backgroundPainelDados}]}>
           <View style={styles.weatherInformation}>
         
