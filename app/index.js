@@ -8,7 +8,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Image, 
-  TouchableOpacity
+  TouchableOpacity, 
 } from "react-native";
 import { useRouter } from "expo-router"
 import { Thermometer, Droplet, Lightbulb, AudioLines, Settings } from "lucide-react-native"
@@ -22,11 +22,9 @@ import imgVentoso from '../assets/iconesClima/ventoso.png'
 
 
 export default function App() {
-  const [data, setData] = useState({ temp: 30, hum: 0, light: 0, sound: 0 });
-  const [error, setError] = useState(null);
+  const [data, setData] = useState({ temp: 0, hum: 0, light: 90, sound: 0 });
 
  
-
   const router = useRouter();
 
   
@@ -205,7 +203,7 @@ export default function App() {
   }
 
   function handleNextDados() { 
-    router.navigate("/dados/index");
+    router.navigate("/dados");
   }
 
   // const corDeFundo = getTempColor()
@@ -241,7 +239,7 @@ export default function App() {
           </View>
           <Text style={[styles.textTemperatura, {color: temaClima.textColor}]}>{data.temp} °C</Text>
           <View style={[styles.viewDayWeek, {backgroundColor: temaClima.painelDiaDaSemana}]}>
-            <Text style={[styles.textDayWeek, {color: temaClima.textDayWeek}]}>{isDay}</Text>
+            <Text style={[styles.textDayWeek, {color: temaClima.colorTextDayWeek}]}>{isDay}</Text>
           </View>
 
         </View>
@@ -257,6 +255,7 @@ export default function App() {
                   strokeWidth={2} 
                   style={{ marginRight: 10 }} 
               />
+
               <Text style={[styles.label, {color: temaClima.textColor}]}>Temperatura</Text>
               <Text style={[styles.label, {color: temaClima.textColor}]}>{data.temp} °C</Text>
               </View> 

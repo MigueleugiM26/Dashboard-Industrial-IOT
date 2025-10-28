@@ -13,4 +13,10 @@ export const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: "center",
   },
+
+  viewOla: { 
+    color: 'red',
+  }
+
+ 
 })
