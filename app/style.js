@@ -19,6 +19,8 @@ export const styles = StyleSheet.create({
     height: 44,
   },
 
+  
+
 
   view_center: { 
     flex: 1, // Aqui vou pegar o conteudo que restou do space-between no centro
@@ -46,14 +48,16 @@ export const styles = StyleSheet.create({
 
 
   viewDayWeek: { 
-    // flex: 1, 
     flexDirection: 'column',
-    // height: '%',
-    // width: '100%',
+    backgroundColor: 'red',
     alignItems: 'center',
     position: 'absolute',
     bottom: 0,
-     
+    borderWidth: 1,
+    width: 110,
+    borderRadius: 40,
+    borderColor: 'white', 
+    borderWidth: 1,
   },
 
   textDayWeek: { 
@@ -70,6 +74,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 20,
     // marginTop: -20,
     marginBottom: -20,
+    borderRadius: 25,
     
   },
 

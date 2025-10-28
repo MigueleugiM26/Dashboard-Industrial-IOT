@@ -22,10 +22,10 @@ import imgVentoso from '../assets/iconesClima/ventoso.png'
 
 
 export default function App() {
-  const [data, setData] = useState({ temp: 0, hum: 44, light: 85, sound: 0 });
+  const [data, setData] = useState({ temp: 30, hum: 0, light: 0, sound: 0 });
   const [error, setError] = useState(null);
-  const [espIP, setEspIP] = useState("192.168.0.149");
-  const intervalRef = useRef(null);
+
+ 
 
   const router = useRouter();
 
@@ -41,20 +41,7 @@ export default function App() {
     'ensolarado': imgSol,
   }
 
-  const fixBackgroundClima = () => { 
-    const {temp} = data
-    if (temp <= 21 && temp <= 12) { 
-      return '#303030';
-    }
 
-    else if (temp <= 12)  { 
-      return '#acf2ff';
-    }
-
-    else { 
-      return '#ffdf9c';
-    }
-  }
   
   const getClimaStatus = () => { 
     const {temp, hum, light, sound} = data;
@@ -66,6 +53,7 @@ export default function App() {
     let backgroundColor;
     let backgroundCircle;
     let backgroundPainelDados;
+    let painelDiaDaSemana;
     let colorTextDayWeek;
     let textColor;
     let imageKey;
@@ -78,7 +66,8 @@ export default function App() {
         textColor: '#f8fcf7', 
         backgroundCircle: '#303030',
         backgroundPainelDados: '#121212',
-        colorTextDayWeek: '#BFBFBF'
+        colorTextDayWeek: '#BFBFBF',
+        painelDiaDaSemana: '#303030',
         
       }
     }
@@ -91,6 +80,9 @@ export default function App() {
         backgroundCircle = '#303030';
         // Cor do painel de dados
         backgroundPainelDados = '#4c3afd';
+        
+        // Painel dia da semana
+        painelDiaDaSemana = '#0d0826';
         // Cor do dia da semana
         colorTextDayWeek = '#fdfdfd';
         // Cor dos textos
@@ -110,9 +102,10 @@ export default function App() {
       status = 'Cinzas'
       backgroundColor = '#212121';
       textColor = '#BFBFBF';
-      backgroundCircle = '#303030'
-      backgroundPainelDados = '#121212'
-      colorTextDayWeek = '#BFBFBF'
+      backgroundCircle = '#303030';
+      backgroundPainelDados = '#121212';
+      colorTextDayWeek = '#BFBFBF';
+      painelDiaDaSemana = '#BFBFBF';
       imageKey = 'cinzas';
     }
 
@@ -120,8 +113,9 @@ export default function App() {
       status = 'Tempestade'
       backgroundColor = ' #0d0727';
       backgroundCircle = '#0d0826';
-      backgroundPainelDados = '#301179'
-      colorTextDayWeek = '#c2c0ca'
+      backgroundPainelDados = '#301179'; 
+      painelDiaDaSemana = '#0d0727';
+      colorTextDayWeek = '#c2c0ca';
       textColor = '#fcfafc';
       imageKey = 'tempestade';
     }
@@ -133,15 +127,16 @@ export default function App() {
       backgroundCircle = '#fefdfe';
       backgroundPainelDados = '#94b3ff';
       colorTextDayWeek = '#98aeec';
-      textColor = '#fcfefe';
       imageKey = 'chuva';
+      painelDiaDaSemana = '#fefdfe';
     }
 
     else if (hum > 90 && temp < 15){ 
       status = 'Nevoa'
       backgroundColor = ' #2045d4';
       backgroundCircle = '#0d0826';
-      backgroundPainelDados = '#1021ca'
+      backgroundPainelDados = '#1021ca';
+      painelDiaDaSemana = '#0d0826';
       colorTextDayWeek = '#fffffd';
       textColor = '#fdfdff';
       imageKey = 'nevoa';
@@ -153,8 +148,10 @@ export default function App() {
       backgroundCircle = '#fdfefd';
       backgroundPainelDados = '#ff8937';
       colorTextDayWeek = '#e5a85d';
+      painelDiaDaSemana = '#fdfefd';
       textColor = '#f0eee9';
       imageKey = 'ensolarado';
+      
     }
 
     else if (light >= 40 && light <= 80) { 
@@ -163,8 +160,8 @@ export default function App() {
       backgroundCircle = '#fefdfe';
       backgroundPainelDados = '#E7ECFF';
       colorTextDayWeek = '#637AE8';
-      textColor = '#637AE8'
-      imageKey = 'nublado'
+      imageKey = 'nublado';
+      painelDiaDaSemana = '#FAFFF5';
     }
 
     // A ver como irei implementar o vento. Irei fazer depois
@@ -178,6 +175,7 @@ export default function App() {
       backgroundCircle: backgroundCircle, 
       backgroundPainelDados: backgroundPainelDados,
       colorTextDayWeek: colorTextDayWeek,
+      painelDiaDaSemana: painelDiaDaSemana,
       imageKey: imageKey,
     }
   }
@@ -202,36 +200,16 @@ export default function App() {
 
 
 
-  function handleNext(){ 
-    router.navigate("/settings/settings")
+  function handleNextConfig(){ 
+    router.navigate("/settings/settings");
+  }
+
+  function handleNextDados() { 
+    router.navigate("/dados/index");
   }
 
   // const corDeFundo = getTempColor()
-  const POLL_INTERVAL = 5000;
-
-
-  const fetchData = async () => {
-    if (!espIP) return;
-    const ESP_URL = `http://${espIP}/`;
-    try {
-      const response = await fetch(ESP_URL);
-      if (!response.ok)
-        throw new Error(`HTTP ${response.status} - ${response.statusText}`);
-      const json = await response.json();
-      setData(json);
-      setError(null);
-    } catch (err) {
-      console.error("Erro ao buscar dados TCP:", err);
-      setError(`${err.name}: ${err.message}`);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-    intervalRef.current = setInterval(fetchData, POLL_INTERVAL);
-    return () => clearInterval(intervalRef.current);
-  }, [espIP]);
-
+  
   return (
     <KeyboardAvoidingView
       style={[styles.container, {backgroundColor: temaClima.backgroundColor}]}
@@ -242,7 +220,7 @@ export default function App() {
             source={require('../assets/estacio-icon.png')} // Caminho relativo para o ícone
           />
 
-          <TouchableOpacity onPress={handleNext}>
+          <TouchableOpacity onPress={handleNextConfig} style={{cursor:'pointer'}}>
             <Settings size={44}
             color={"white"}
             />
@@ -262,64 +240,59 @@ export default function App() {
             </View>
           </View>
           <Text style={[styles.textTemperatura, {color: temaClima.textColor}]}>{data.temp} °C</Text>
-          <View style={styles.viewDayWeek}>
-            <Text style={styles.textDayWeek}>{isDay}</Text>
+          <View style={[styles.viewDayWeek, {backgroundColor: temaClima.painelDiaDaSemana}]}>
+            <Text style={[styles.textDayWeek, {color: temaClima.textDayWeek}]}>{isDay}</Text>
           </View>
 
         </View>
 
         
-        
-        <View style={[styles.viewInformationsWeather, {backgroundColor: temaClima.backgroundPainelDados}]}>
-          <View style={styles.weatherInformation}>
-        
-            <Thermometer 
-                size={44}           
-                color="white"       
-                strokeWidth={2} 
-                style={{ marginRight: 10 }} 
-            />
-            <Text style={[styles.label, {color: temaClima.textColor}]}>Temperatura</Text>
-            <Text style={[styles.label, {color: temaClima.textColor}]}>{data.temp} °C</Text>
-            </View> 
-          <View style={styles.weatherInformation}>
-            <Droplet size={44} 
-              color={"white"}
-            />
-            <Text style={[styles.label, {color: temaClima.textColor}]}>Umidade</Text>
-            <Text style={[styles.label, {color: temaClima.textColor}]}>{data.hum} %</Text>
-          </View>
+        <TouchableOpacity onPress={handleNextDados} style={{cursor:'pointer'}}>
+          <View style={[styles.viewInformationsWeather, {backgroundColor: temaClima.backgroundPainelDados}]}>
+            <View style={styles.weatherInformation}>
+          
+              <Thermometer 
+                  size={44}           
+                  color="white"       
+                  strokeWidth={2} 
+                  style={{ marginRight: 10 }} 
+              />
+              <Text style={[styles.label, {color: temaClima.textColor}]}>Temperatura</Text>
+              <Text style={[styles.label, {color: temaClima.textColor}]}>{data.temp} °C</Text>
+              </View> 
+            <View style={styles.weatherInformation}>
+              <Droplet size={44} 
+                color={"white"}
+              />
+              <Text style={[styles.label, {color: temaClima.textColor}]}>Umidade</Text>
+              <Text style={[styles.label, {color: temaClima.textColor}]}>{data.hum} %</Text>
+            </View>
 
-          <View style={styles.weatherInformation}>
-            <Lightbulb
+            <View style={styles.weatherInformation}>
+              <Lightbulb
+                size={44}
+                color={"white"}
+              /> 
+              <Text style={[styles.label, {color: temaClima.textColor}]}>Luz</Text>
+              <Text style={[styles.label, {color: temaClima.textColor}]}>{data.light} %</Text>    
+            </View>
+
+            <View style={styles.weatherInformation}>
+              <AudioLines 
               size={44}
               color={"white"}
-            /> 
-            <Text style={[styles.label, {color: temaClima.textColor}]}>Luz</Text>
-            <Text style={[styles.label, {color: temaClima.textColor}]}>{data.light} %</Text>    
+              />
+              <Text style={[styles.label, {color: temaClima.textColor}]}>Som </Text>
+              <Text style={[styles.label, {color: temaClima.textColor}]}>{data.sound} dB</Text>
+            </View>
+            
+            
+            
           </View>
-
-          <View style={styles.weatherInformation}>
-            <AudioLines 
-            size={44}
-            color={"white"}
-            />
-            <Text style={[styles.label, {color: temaClima.textColor}]}>Som </Text>
-            <Text style={[styles.label, {color: temaClima.textColor}]}>{data.sound} dB</Text>
-          </View>
-          
-          
-          
-        </View>
+        </TouchableOpacity>
 
 {/*       
-      <TextInput
-        style={styles.input}
-        placeholder="Digite o IP do ESP"
-        placeholderTextColor="#888"
-        value={espIP}
-        onChangeText={(text) => setEspIP(text)}
-      /> */}
+       */}
 
      
 
