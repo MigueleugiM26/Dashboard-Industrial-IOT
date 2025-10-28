@@ -2,11 +2,11 @@ import React, { useEffect, useState, useRef } from "react";
 import Settings from "./settings/settings";
 import Dados from "./dados";
 import Index from "./index";
-import { View } from "lucide-react-native";
+import { View } from "react-native";
 
 
 
-export default function App() { 
+export default function AppProps() { 
     const [espIP, setEspIP] = useState("192.168.0.149");
     const intervalRef = useRef(null);
     const POLL_INTERVAL = 5000;
@@ -38,17 +38,15 @@ export default function App() {
 
   return ( 
     <View style={{flex:1}}>
-        {/* Aqui vou pasar o ip e a função de atualização para o Settings */}
-        <Settings> 
-            espIP={espIP}
-            setEspIP={setEspIP}
-        </Settings>
-
-        {/* Aqui vou passar para os gráficos */}
-        <Dados>
-            data={data}
-            error={error}
-        </Dados>
+            <Settings 
+                espIP={espIP}
+                setEspIP={setEspIP}
+            />
+            <Dados
+                data={data}
+                error={error}
+            />
+            <Index data={data} setData={setData} />
 
 
     </View>

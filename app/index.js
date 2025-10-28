@@ -21,8 +21,7 @@ import imgTempestade from '../assets/iconesClima/tempestade.png'
 import imgVentoso from '../assets/iconesClima/ventoso.png'
 
 
-export default function App() {
-  const [data, setData] = useState({ temp: 0, hum: 0, light: 90, sound: 0 });
+export default function App({data = {temp: 0, hum: 0, light: 90, sound: 0}, setData}) {
 
  
   const router = useRouter();
