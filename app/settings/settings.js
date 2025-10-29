@@ -1,21 +1,22 @@
-import { View, Text, TextInput } from "react-native-web";
+import { View, Text, TextInput, Button } from "react-native-web";
 import { styles } from "./style";
-
-
-export default function Settings({espIP, setEspIP}) { 
-    
-
+import { useData } from "../context/DataContext";
+import { useRouter } from "expo-router";
+import React from "react";
+export default function Settings() { 
+    const { espIP, setEspIP } = useData();
+    const { input, setInput } = React.useState(espIP);
+    const router = useRouter();
     return ( 
         <View style={{flex: 1}}>
-            <Text>Configurações</Text>
             <TextInput
             style={styles.input}
             placeholder="Digite o IP do ESP"
             placeholderTextColor="#888"
-            value={espIP}
+            value={input}
             onChangeText={(text) => setEspIP(text)}
             />
-
+            <Button title="Salvar" onPress={() => {setEspIP(input); router.back();}}></Button>
         </View>
         
     )

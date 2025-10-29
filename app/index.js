@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useMemo } from "react";
 import { styles } from "./style";
 import {
   StyleSheet,
@@ -19,11 +19,13 @@ import imgNublado from '../assets/iconesClima/nublado.png'
 import imgSol from '../assets/iconesClima/sol.png'
 import imgTempestade from '../assets/iconesClima/tempestade.png'
 import imgVentoso from '../assets/iconesClima/ventoso.png'
+import imgCinzas from '../assets/iconesClima/cinzas.png'
+import { useData } from "./context/DataContext";
 
 
-export default function App({data = {temp: 0, hum: 0, light: 90, sound: 0}, setData}) {
+export default function App() {
 
- 
+ const {data} = useData();
   const router = useRouter();
 
   
@@ -36,11 +38,12 @@ export default function App({data = {temp: 0, hum: 0, light: 90, sound: 0}, setD
     'tempestade': imgTempestade,
     'ventoso': imgVentoso,
     'ensolarado': imgSol,
+    'cinzas': imgCinzas,
   }
 
 
   
-  const getClimaStatus = () => { 
+  const temaClima = useMemo(() => { 
     const {temp, hum, light, sound} = data;
     const IS_NIGHT = light < 10; 
 
@@ -175,7 +178,7 @@ export default function App({data = {temp: 0, hum: 0, light: 90, sound: 0}, setD
       painelDiaDaSemana: painelDiaDaSemana,
       imageKey: imageKey,
     }
-  }
+  }, [data]);
 
   const getHours = (hours) => { 
     const dia = 6; 
@@ -188,7 +191,6 @@ export default function App({data = {temp: 0, hum: 0, light: 90, sound: 0}, setD
     }
   } 
 
-  const temaClima = getClimaStatus();
   const imagemCircleClima = ImagensClima[temaClima.imageKey]
   const dataAtual = new Date();
   const horaAtual = dataAtual.getHours();
