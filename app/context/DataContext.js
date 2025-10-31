@@ -7,10 +7,13 @@ const DataContext = createContext();
 // children é tudo que tá dentro do <DataProvider>
 export function DataProvider({children}) { 
     const [espIP, setEspIP] = useState("192.168.0.149");
-    const [data, setData] = useState({ temp: 30, hum: 0, light: 95, sound: 0 });
+    const [data, setData] = useState({ temp: 0, hum: 0, light: 0, sound: 0 });
     const [error, setError] = useState(null);
     const intervalRef = useRef(null);
     const POLL_INTERVAL = 5000;
+
+    // Aqui vou pegar os valores a cada 5 segundos
+    const [history, setHistory] = useState([]);
 
     const fetchData = async () => {
     if (!espIP) return;
@@ -21,6 +24,16 @@ export function DataProvider({children}) {
       const json = await response.json();
       setData(json);
       setError(null);
+
+      // Aqui vou adicionar ao histórico
+      setHistory(prev => { 
+        const newEntry = { 
+          time: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+          ...json
+        };
+      });
+      // Mantendo apenas os útimos 12 valores
+      return [...prev.slice(-11), newEntry];
     } catch (err) {
       console.error("Erro:", err);
       setError(`${err.name}: ${err.message}`);
@@ -35,7 +48,7 @@ export function DataProvider({children}) {
 
   {/* Colocando todos dados dentro do armario. Qualquer tela que etiver dentro do <DataProvider> pode acessar isso.*/}
   return ( 
-    <DataContext.Provider value={{data, error, espIP, setEspIP, setData}}>
+    <DataContext.Provider value={{data, error, espIP, setEspIP, history,setData}}>
         {children}
     </DataContext.Provider>
   )

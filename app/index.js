@@ -42,10 +42,20 @@ export default function App() {
   }
 
 
-  
+    const getHours = (hours) => { 
+    const dia = 6; 
+    const noite = 19;
+
+    if (hours >= dia && hours < noite) { 
+      return 'Dia';
+    } else { 
+      return 'Noite';
+    }
+  } 
+
   const temaClima = useMemo(() => { 
     const {temp, hum, light, sound} = data;
-    const IS_NIGHT = light < 10; 
+    const IS_NIGHT = light < 10;
 
     let status;
     let imageName;
@@ -72,7 +82,7 @@ export default function App() {
       }
     }
     // Tema base: Noite
-    if (IS_NIGHT) { 
+    if (IS_NIGHT === 'Noite') { 
         status = 'Estável (Noite)';
         // Cor de fundo
         backgroundColor = '#7d72ff'; 
@@ -90,13 +100,7 @@ export default function App() {
         imageKey = 'lua';  
         
     } 
-    else { 
-        status = 'Estável (Dia)';
-        backgroundColor = '#60a5fa'; 
-        textColor = '#111';
-        imageKey = 'sol';     
-    } 
-
+   
 
     if (temp > 35 && sound > 80) { 
       status = 'Cinzas'
@@ -162,9 +166,22 @@ export default function App() {
       colorTextDayWeek = '#637AE8';
       imageKey = 'nublado';
       painelDiaDaSemana = '#FAFFF5';
-    }
 
-    // A ver como irei implementar o vento. Irei fazer depois
+
+    
+    }
+    
+    // } else if (){ 
+    //   status = 'Vento';
+    //   backgroundColor: "#65fbda";
+    //   backgroundCircle: "#ffffff";
+    //   backgroundPainelDados: "#4cc4d5";
+    //   painelDiaDaSemana: '#ffffff';
+    //   colorTextDayWeek: '#69aeb7';
+    //   textColor: '#f0edee';
+    // }
+
+    
 
     return { 
       status: status, 
@@ -180,21 +197,13 @@ export default function App() {
     }
   }, [data]);
 
-  const getHours = (hours) => { 
-    const dia = 6; 
-    const noite = 19;
 
-    if (hours >= dia && hours < noite) { 
-      return 'Dia';
-    } else { 
-      return 'Noite';
-    }
-  } 
 
   const imagemCircleClima = ImagensClima[temaClima.imageKey]
   const dataAtual = new Date();
   const horaAtual = dataAtual.getHours();
-  const isDay = getHours(horaAtual);
+  const IS_NIGHT = getHours(horaAtual);
+   const isDay = getHours(horaAtual);
 
 
 
