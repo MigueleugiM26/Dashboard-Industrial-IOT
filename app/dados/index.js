@@ -53,16 +53,17 @@ export default function Dados() {
   const lightData = history.map(h => h.light);
   const soundData = history.map(h => h.sound);
 
-  const chartConfig = {
-    backgroundColor: "#fff",
-    backgroundGradientFrom: "#f8f9fa",
-    backgroundGradientTo: "#fff",
-    decimalPlaces: 1,
-    color: (opacity = 1) => `rgba(0, 122, 255, ${opacity})`,
-    labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-    style: { borderRadius: 16 },
-    propsForDots: { r: "4", strokeWidth: "2", stroke: "#007AFF" },
-  };
+  const chartConfig = (colorHex) => ({
+  backgroundColor: "#fff",
+  backgroundGradientFrom: "#f8f9fa",
+  backgroundGradientTo: "#fff",
+  decimalPlaces: 1,
+  color: (opacity = 1) => `rgba(${parseInt(colorHex.slice(1,3),16)},${parseInt(colorHex.slice(3,5),16)},${parseInt(colorHex.slice(5,7),16)},${opacity})`,
+  labelColor: (opacity = 1) => `rgba(0,0,0,${opacity})`,
+  style: { borderRadius: 16 },
+  propsForDots: { r: "4", strokeWidth: "2", stroke: colorHex, fill: colorHex },
+});
+
 
   return (
     <ScrollView style={{ flex: 1, padding: 20, backgroundColor: "#f8f9fa" }}>
@@ -75,7 +76,7 @@ export default function Dados() {
         data={{ labels, datasets: [{ data: tempData, color: () => `#FF3B30` }] }}
         width={screenWidth - 40}
         height={220}
-        chartConfig={chartConfig}
+        chartConfig={chartConfig('"#FF3B30"')}
         bezier
         style={{ marginBottom: 30, borderRadius: 16 }}
       />
@@ -85,7 +86,7 @@ export default function Dados() {
         data={{ labels, datasets: [{ data: humData, color: () => `#34C759` }] }}
         width={screenWidth - 40}
         height={220}
-        chartConfig={chartConfig}
+        chartConfig={chartConfig('#37e2dc')}
         bezier
         style={{ marginBottom: 30, borderRadius: 16 }}
       />
@@ -95,7 +96,7 @@ export default function Dados() {
         data={{ labels, datasets: [{ data: lightData, color: () => `#FFCC00` }] }}
         width={screenWidth - 40}
         height={220}
-        chartConfig={chartConfig}
+        chartConfig={chartConfig("#FFCC00")}
         bezier
         style={{ marginBottom: 30, borderRadius: 16 }}
       />
@@ -105,7 +106,7 @@ export default function Dados() {
         data={{ labels, datasets: [{ data: soundData, color: () => `#AF52DE` }] }}
         width={screenWidth - 40}
         height={220}
-        chartConfig={chartConfig}
+        chartConfig={chartConfig("#AF52DE")}
         bezier
         style={{ marginBottom: 50, borderRadius: 16 }}
       />

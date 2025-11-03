@@ -7,7 +7,7 @@ const DataContext = createContext();
 // children é tudo que tá dentro do <DataProvider>
 export function DataProvider({children}) { 
     const [espIP, setEspIP] = useState("192.168.0.149");
-    const [data, setData] = useState({ temp: 0, hum: 0, light: 0, sound: 0 });
+    const [data, setData] = useState({ temp: 85, hum: 0, light: 55, sound: 55 });
     const [error, setError] = useState(null);
     const intervalRef = useRef(null);
     const POLL_INTERVAL = 5000;

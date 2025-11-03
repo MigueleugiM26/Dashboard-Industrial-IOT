@@ -67,7 +67,7 @@ export default function App() {
     let colorTextDayWeek;
     let textColor;
     let imageKey;
-
+    let colorIconConfig;
     if (temp == 0 && light == 0) { 
       return { 
         status: "Aguardando dados...",
@@ -109,13 +109,13 @@ export default function App() {
       backgroundCircle = '#303030';
       backgroundPainelDados = '#121212';
       colorTextDayWeek = '#BFBFBF';
-      painelDiaDaSemana = '#BFBFBF';
+      painelDiaDaSemana = '#303030';
       imageKey = 'cinzas';
     }
 
     else if (hum > 85 && light < 20 && sound > 70) { 
       status = 'Tempestade'
-      backgroundColor = ' #0d0727';
+      backgroundColor = '#4d2b88';
       backgroundCircle = '#0d0826';
       backgroundPainelDados = '#301179'; 
       painelDiaDaSemana = '#0d0727';
@@ -126,7 +126,7 @@ export default function App() {
 
     else if (hum > 75 && light < 40) { 
       status = 'Chuva'
-      backgroundColor = ' #c0d3fe'
+      backgroundColor = '#98aeec'
       textColor = '#fcfefe'
       backgroundCircle = '#fefdfe';
       backgroundPainelDados = '#94b3ff';
@@ -135,7 +135,7 @@ export default function App() {
       painelDiaDaSemana = '#fefdfe';
     }
 
-    else if (hum > 90 && temp < 15){ 
+    else if (hum > 90 && temp < 15 ){ 
       status = 'Nevoa'
       backgroundColor = ' #2045d4';
       backgroundCircle = '#0d0826';
@@ -166,20 +166,21 @@ export default function App() {
       colorTextDayWeek = '#637AE8';
       imageKey = 'nublado';
       painelDiaDaSemana = '#FAFFF5';
+      textColor = '#637AE8';
+      colorIconConfig = 'black';
+    }
 
-
-    
+    else if (sound > 50 && light > 50){ 
+      status = 'Ventoso';
+      backgroundColor: "#65fbda";
+      backgroundCircle: "#ffffff";
+      backgroundPainelDados: "#4cc4d5";
+      painelDiaDaSemana: '#ffffff';
+      colorTextDayWeek: '#69aeb7';
+      textColor: '#f0edee';
     }
     
-    // } else if (){ 
-    //   status = 'Vento';
-    //   backgroundColor: "#65fbda";
-    //   backgroundCircle: "#ffffff";
-    //   backgroundPainelDados: "#4cc4d5";
-    //   painelDiaDaSemana: '#ffffff';
-    //   colorTextDayWeek: '#69aeb7';
-    //   textColor: '#f0edee';
-    // }
+    
 
     
 
@@ -194,6 +195,7 @@ export default function App() {
       colorTextDayWeek: colorTextDayWeek,
       painelDiaDaSemana: painelDiaDaSemana,
       imageKey: imageKey,
+      colorIconConfig: colorIconConfig,
     }
   }, [data]);
 
@@ -203,8 +205,8 @@ export default function App() {
   const dataAtual = new Date();
   const horaAtual = dataAtual.getHours();
   const IS_NIGHT = getHours(horaAtual);
-   const isDay = getHours(horaAtual);
-
+  const isDay = getHours(horaAtual);
+  const clima = temaClima.status;
 
 
 
@@ -230,7 +232,7 @@ export default function App() {
 
           <TouchableOpacity onPress={handleNextConfig} style={{cursor:'pointer'}}>
             <Settings size={44}
-            color={"white"}
+            style={styles.iconCircle}
             />
           </TouchableOpacity>
           
@@ -248,6 +250,7 @@ export default function App() {
             </View>
           </View>
           <Text style={[styles.textTemperatura, {color: temaClima.textColor}]}>{data.temp} °C</Text>
+          <Text style={[styles.clima, {color: temaClima.textColor}]}>{clima}</Text>
           <View style={[styles.viewDayWeek, {backgroundColor: temaClima.painelDiaDaSemana}]}>
             <Text style={[styles.textDayWeek, {color: temaClima.colorTextDayWeek}]}>{isDay}</Text>
           </View>

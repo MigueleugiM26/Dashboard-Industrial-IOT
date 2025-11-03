@@ -1,4 +1,4 @@
-import { View, Text, TextInput, Button } from "react-native-web";
+import { View, Text, TextInput, Button } from "react-native";
 import { styles } from "./style";
 import { useData } from "../context/DataContext";
 import { useRouter } from "expo-router";

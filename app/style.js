@@ -11,6 +11,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: "100%",
+    marginTop: 15,
     
   },
 
@@ -44,6 +45,16 @@ export const styles = StyleSheet.create({
   iconCircle: { 
     width: 100,
     height: 100,
+  },
+
+  clima: { 
+    color: 'blue',
+    marginTop: 50,
+    fontSize: 25,
+  },
+
+  iconConfig: { 
+    color: 'white',
   },
 
 
