@@ -1,11 +1,11 @@
-import imgChuva from '../assets/iconesClima/chuva.png'
-import imgLua from '../assets/iconesClima/lua.png'
-import imgNevoa from '../assets/iconesClima/nevoa.png'
-import imgNublado from '../assets/iconesClima/nublado.png'
-import imgSol from '../assets/iconesClima/sol.png'
-import imgTempestade from '../assets/iconesClima/tempestade.png'
-import imgVentoso from '../assets/iconesClima/ventoso.png'
-import imgCinzas from '../assets/iconesClima/cinzas.png'
+// import imgChuva from '../assets/iconesClima/chuva.png'
+// import imgLua from '../assets/iconesClima/lua.png'
+// import imgNevoa from '../assets/iconesClima/nevoa.png'
+// import imgNublado from '../assets/iconesClima/nublado.png'
+// import imgSol from '../assets/iconesClima/sol.png'
+// import imgTempestade from '../assets/iconesClima/tempestade.png'
+// import imgVentoso from '../assets/iconesClima/ventoso.png'
+// import imgCinzas from '../assets/iconesClima/cinzas.png'
  
  
  const ImagensClima = { 
