@@ -54,7 +54,8 @@ export const styles = StyleSheet.create({
   },
 
   iconConfig: { 
-    color: 'white',
+    color: 'black',
+    cursor: 'pointer',
   },
 
 

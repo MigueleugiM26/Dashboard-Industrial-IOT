@@ -3,14 +3,19 @@ import { styles } from "./style";
 import { useData } from "../context/DataContext";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
+import { Picker } from "react-native-web";
 
 export default function Settings() {
-  const { espIP, setEspIP } = useData();
+  const { espIP, setEspIP, unit, setUnit } = useData(); // Pega do contexto
   const [input, setInput] = useState(espIP);
-  const [medida, setMedida] = useState("Celsius");
-  const [tema, setTema] = useState("Escuro");
   const router = useRouter();
 
+
+  const handleUnitChange = (newUnit) => { 
+    setUnit(newUnit);
+  }
+
+ 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Configurações</Text>
@@ -25,36 +30,17 @@ export default function Settings() {
       />
 
       <Text style={styles.label}>Unidade de medida</Text>
-      <TouchableOpacity
-        style={styles.box}
-        onPress={() =>
-          setMedida(medida === "Celsius" ? "Fahrenheit" : "Celsius")
-        }
+      <Picker
+        selectedValue={unit} 
+        onValueChange={(itemValue) => handleUnitChange(itemValue)}
       >
-        <Text style={styles.boxText}>{medida}</Text>
-      </TouchableOpacity>
+        <Picker.Item label="Celsius (°C)" value="Celsius" />
+        <Picker.Item label="Fahrenheit (°F)" value="Fahrenheit" />
 
-      <Text style={styles.label}>Tema do aplicativo</Text>
-      <View style={styles.themeContainer}>
-        {["Claro", "Escuro"].map((t) => (
-          <TouchableOpacity
-            key={t}
-            style={[styles.themeButton, tema === t && styles.selectedTheme]}
-            onPress={() => setTema(t)}
-          >
-            <Text style={styles.themeText}>{t}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-
-      <Button
-        title="Salvar"
-        onPress={() => {
-          setEspIP(input);
-          router.back();
-        }}
-      />
-
+      </Picker>
+        <Text style={styles.boxText}>{unit}</Text>
+      
+       
       <View style={styles.footer}>
         <Text style={styles.footerText}>Integrantes:</Text>
         <Text style={styles.footerText}>

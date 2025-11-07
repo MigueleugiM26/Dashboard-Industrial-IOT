@@ -7,8 +7,9 @@ const DataContext = createContext();
 // children é tudo que tá dentro do <DataProvider>
 export function DataProvider({children}) { 
     const [espIP, setEspIP] = useState("192.168.0.149");
-    const [data, setData] = useState({ temp: 85, hum: 0, light: 55, sound: 55 });
+    const [data, setData] = useState({ temp: 35, hum: 0, light: 95, sound: 55 });
     const [error, setError] = useState(null);
+    const [unit, setUnit] = useState("Celsius");
     const intervalRef = useRef(null);
     const POLL_INTERVAL = 5000;
 
@@ -48,7 +49,15 @@ export function DataProvider({children}) {
 
   {/* Colocando todos dados dentro do armario. Qualquer tela que etiver dentro do <DataProvider> pode acessar isso.*/}
   return ( 
-    <DataContext.Provider value={{data, error, espIP, setEspIP, history,setData}}>
+    <DataContext.Provider value={{
+      data, 
+      error, 
+      espIP, 
+      setEspIP, 
+      history,
+      setData,
+      unit, 
+      setUnit}}>
         {children}
     </DataContext.Provider>
   )

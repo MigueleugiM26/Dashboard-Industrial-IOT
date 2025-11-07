@@ -1,17 +1,3 @@
-import React, { useEffect, useState, useRef, useMemo } from "react";
-import { styles } from "./style";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  KeyboardAvoidingView,
-  Platform,
-  Image, 
-  TouchableOpacity, 
-} from "react-native";
-import { useRouter } from "expo-router"
-import { Thermometer, Droplet, Lightbulb, AudioLines, Settings } from "lucide-react-native"
 import imgChuva from '../assets/iconesClima/chuva.png'
 import imgLua from '../assets/iconesClima/lua.png'
 import imgNevoa from '../assets/iconesClima/nevoa.png'
@@ -20,23 +6,9 @@ import imgSol from '../assets/iconesClima/sol.png'
 import imgTempestade from '../assets/iconesClima/tempestade.png'
 import imgVentoso from '../assets/iconesClima/ventoso.png'
 import imgCinzas from '../assets/iconesClima/cinzas.png'
-import { useData } from "./context/DataContext";
-import notifee from '@notifee/react-native';
-export default function App() {
-
- const {data, unit} = useData();
- const router = useRouter();
-
-
- async function requestPermission() { 
-  const settings = await notifee.requestPermission();
-  if (settings.authorizationStatus >= 1) { 
-    console.log("Permissão concedida!")
-  }
- }
-
-  
-  const ImagensClima = { 
+ 
+ 
+ const ImagensClima = { 
     'chuva': imgChuva, 
     'lua': imgLua, 
     'nevoa': imgNevoa,
@@ -231,123 +203,3 @@ export default function App() {
       colorIconConfig: colorIconConfig,
     }
   }, [data]);
-
-
-  const imagemCircleClima = ImagensClima[temaClima.imageKey]
-  const dataAtual = new Date();
-  const horaAtual = dataAtual.getHours();
-  const IS_NIGHT = getHours(horaAtual);
-  const isDay = getHours(horaAtual);
-  const clima = temaClima.status;
-
-
-
-  function handleNextConfig(){ 
-    router.navigate("/settings/settings");
-  }
-
-  function handleNextDados() { 
-    router.navigate("/dados");
-  }
-
-  // const corDeFundo = getTempColor()
-  
-  return (
-    <KeyboardAvoidingView
-      style={[styles.container, {backgroundColor: temaClima.backgroundColor}]}
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
-    > 
-        <View style={styles.view_icon}>
-          <Image style={styles.image}
-            source={require('../assets/estacio-icon.png')} // Caminho relativo para o ícone
-          />
-
-          <TouchableOpacity onPress={handleNextConfig} >
-            <Settings size={50}
-            style={styles.iconConfig}
-            />
-          </TouchableOpacity>
-          
-        </View>
-
-        <View style={styles.view_center}>
-          
-          <View>
-            <View style={[styles.circleClima, {backgroundColor: temaClima.backgroundCircle}]}>
-              {imagemCircleClima && ( 
-                <Image style={styles.iconCircle}
-                  source={imagemCircleClima}
-                />
-              )}
-            </View>
-          </View>
-          <Text style={[styles.textTemperatura, {color: temaClima.textColor}]}>{temperaturaExibida.valor} {temperaturaExibida.simbolo}</Text>
-          <Text style={[styles.clima, {color: temaClima.textColor}]}>{clima}</Text>
-          <View style={[styles.viewDayWeek, {backgroundColor: temaClima.painelDiaDaSemana}]}>
-            <Text style={[styles.textDayWeek, {color: temaClima.colorTextDayWeek}]}>{isDay}</Text>
-          </View>
-
-        </View>
-
-        
-        <TouchableOpacity onPress={handleNextDados} style={{cursor:'pointer'}}>
-          <View style={[styles.viewInformationsWeather, {backgroundColor: temaClima.backgroundPainelDados}]}>
-            <View style={styles.weatherInformation}>
-          
-              <Thermometer 
-                  size={44}           
-                  color="white"       
-                  strokeWidth={2} 
-                  style={{ marginRight: 10 }} 
-              />
-
-              <Text style={[styles.label, {color: temaClima.textColor}]}>Temperatura</Text>
-              <Text style={[styles.label, {color: temaClima.textColor}]}>{temperaturaExibida.valor} {temperaturaExibida.simbolo}</Text>
-              </View> 
-            <View style={styles.weatherInformation}>
-              <Droplet size={44} 
-                color={"white"}
-              />
-              <Text style={[styles.label, {color: temaClima.textColor}]}>Umidade</Text>
-              <Text style={[styles.label, {color: temaClima.textColor}]}>{data.hum} %</Text>
-            </View>
-
-            <View style={styles.weatherInformation}>
-              <Lightbulb
-                size={44}
-                color={"white"}
-              /> 
-              <Text style={[styles.label, {color: temaClima.textColor}]}>Luz</Text>
-              <Text style={[styles.label, {color: temaClima.textColor}]}>{data.light} %</Text>    
-            </View>
-
-            <View style={styles.weatherInformation}>
-              <AudioLines 
-              size={44}
-              color={"white"}
-              />
-              <Text style={[styles.label, {color: temaClima.textColor}]}>Som </Text>
-              <Text style={[styles.label, {color: temaClima.textColor}]}>{data.sound} dB</Text>
-            </View>
-            
-            
-            
-          </View>
-        </TouchableOpacity>
-
-{/*       
-       */}
-
-     
-
-      {/* {error && (
-        <View style={{ marginTop: 20, alignItems: "center" }}>
-          <Text style={styles.error}>⚠️ Falha ao obter dados do sensor</Text>
-          <Text style={styles.errorDetails}>{error}</Text>
-        </View>
-      )} */}
-    </KeyboardAvoidingView>
-  );
-}
-
-

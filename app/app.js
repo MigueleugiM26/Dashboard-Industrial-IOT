@@ -5,7 +5,6 @@ import Index from "./index";
 import { View } from "react-native";
 
 
-
 export default function AppProps() { 
     const [espIP, setEspIP] = useState("192.168.0.149");
     const intervalRef = useRef(null);
