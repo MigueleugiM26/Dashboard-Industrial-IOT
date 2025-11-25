@@ -14,7 +14,6 @@ import Animated, {
   useAnimatedStyle,
   withSpring,
 } from "react-native-reanimated";
-import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { useRouter } from "expo-router";
 import {
   Thermometer,
@@ -43,6 +42,16 @@ export default function App() {
   const router = useRouter();
   const translateY = useSharedValue(SCREEN_HEIGHT - COLLAPSED_HEIGHT);
   const [isExpanded, setIsExpanded] = useState(false);
+
+  const toggleExpanded = () => {
+    if (isExpanded) {
+      translateY.value = withSpring(SCREEN_HEIGHT - COLLAPSED_HEIGHT);
+      setIsExpanded(false);
+    } else {
+      translateY.value = withSpring(SCREEN_HEIGHT - EXPANDED_HEIGHT);
+      setIsExpanded(true);
+    }
+  };
 
   const ImagensClima = {
     chuva: imgChuva,
@@ -227,37 +236,6 @@ export default function App() {
     return days[dataAtual.getDay()];
   };
 
-  // Gesture using GestureDetector
-  const panGesture = Gesture.Pan()
-    .onStart(() => {
-      // No context needed
-    })
-    .onUpdate((e) => {
-      const newY = SCREEN_HEIGHT - COLLAPSED_HEIGHT + e.translationY;
-      translateY.value = Math.max(
-        SCREEN_HEIGHT - EXPANDED_HEIGHT,
-        Math.min(SCREEN_HEIGHT - COLLAPSED_HEIGHT, newY)
-      );
-    })
-    .onEnd((e) => {
-      const threshold = (EXPANDED_HEIGHT - COLLAPSED_HEIGHT) / 2;
-      const currentOffset = SCREEN_HEIGHT - translateY.value;
-
-      if (e.velocityY > 500) {
-        translateY.value = withSpring(SCREEN_HEIGHT - COLLAPSED_HEIGHT);
-        setIsExpanded(false);
-      } else if (e.velocityY < -500) {
-        translateY.value = withSpring(SCREEN_HEIGHT - EXPANDED_HEIGHT);
-        setIsExpanded(true);
-      } else if (currentOffset > threshold + COLLAPSED_HEIGHT) {
-        translateY.value = withSpring(SCREEN_HEIGHT - EXPANDED_HEIGHT);
-        setIsExpanded(true);
-      } else {
-        translateY.value = withSpring(SCREEN_HEIGHT - COLLAPSED_HEIGHT);
-        setIsExpanded(false);
-      }
-    });
-
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ translateY: translateY.value }],
   }));
@@ -333,14 +311,14 @@ export default function App() {
       </View>
 
       {/* Collapsible bottom sheet */}
-      <GestureDetector gesture={panGesture}>
-        <Animated.View
-          style={[
-            styles.bottomSheet,
-            { backgroundColor: temaClima.backgroundPainelDados },
-            animatedStyle,
-          ]}
-        >
+      <Animated.View
+        style={[
+          styles.bottomSheet,
+          { backgroundColor: temaClima.backgroundPainelDados },
+          animatedStyle,
+        ]}
+      >
+        <TouchableOpacity onPress={toggleExpanded} activeOpacity={0.9}>
           <View
             style={[
               styles.dateBadge,
@@ -355,172 +333,144 @@ export default function App() {
           </View>
 
           <View style={styles.dragHandle} />
+        </TouchableOpacity>
 
-          <ScrollView
-            style={styles.sheetContent}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ paddingBottom: 200 }}
-            scrollEnabled={true}
-          >
-            {/* Collapsed Info - Vertical Stack */}
-            <View style={styles.collapsedInfo}>
-              <View style={styles.infoItemHorizontal}>
-                <Thermometer
-                  size={36}
-                  color={temaClima.textColor}
-                  strokeWidth={2}
-                />
-                <Text
-                  style={[styles.infoLabel, { color: temaClima.textColor }]}
-                >
-                  Temperatura
-                </Text>
-                <Text
-                  style={[styles.infoValue, { color: temaClima.textColor }]}
-                >
-                  {temperaturaExibida.valor}
-                  {temperaturaExibida.simbolo}
-                </Text>
-              </View>
-
-              <View style={styles.infoItemHorizontal}>
-                <Droplet size={36} color={temaClima.textColor} />
-                <Text
-                  style={[styles.infoLabel, { color: temaClima.textColor }]}
-                >
-                  Umidade
-                </Text>
-                <Text
-                  style={[styles.infoValue, { color: temaClima.textColor }]}
-                >
-                  {data.hum}%
-                </Text>
-              </View>
-
-              <View style={styles.infoItemHorizontal}>
-                <Lightbulb size={36} color={temaClima.textColor} />
-                <Text
-                  style={[styles.infoLabel, { color: temaClima.textColor }]}
-                >
-                  Luminosidade
-                </Text>
-                <Text
-                  style={[styles.infoValue, { color: temaClima.textColor }]}
-                >
-                  {data.light}%
-                </Text>
-              </View>
+        <ScrollView
+          style={styles.sheetContent}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 200 }}
+          scrollEnabled={true}
+        >
+          {/* Collapsed Info - Vertical Stack */}
+          <View style={styles.collapsedInfo}>
+            <View style={styles.infoItemHorizontal}>
+              <Thermometer
+                size={36}
+                color={temaClima.textColor}
+                strokeWidth={2}
+              />
+              <Text style={[styles.infoLabel, { color: temaClima.textColor }]}>
+                Temperatura
+              </Text>
+              <Text style={[styles.infoValue, { color: temaClima.textColor }]}>
+                {temperaturaExibida.valor}
+                {temperaturaExibida.simbolo}
+              </Text>
             </View>
 
-            {/* Expanded Content - Only visible when expanded */}
-            {isExpanded && (
-              <>
-                <View style={styles.infoItemHorizontal}>
-                  <AudioLines size={36} color={temaClima.textColor} />
+            <View style={styles.infoItemHorizontal}>
+              <Droplet size={36} color={temaClima.textColor} />
+              <Text style={[styles.infoLabel, { color: temaClima.textColor }]}>
+                Umidade
+              </Text>
+              <Text style={[styles.infoValue, { color: temaClima.textColor }]}>
+                {data.hum}%
+              </Text>
+            </View>
+
+            <View style={styles.infoItemHorizontal}>
+              <Lightbulb size={36} color={temaClima.textColor} />
+              <Text style={[styles.infoLabel, { color: temaClima.textColor }]}>
+                Luminosidade
+              </Text>
+              <Text style={[styles.infoValue, { color: temaClima.textColor }]}>
+                {data.light}%
+              </Text>
+            </View>
+          </View>
+
+          {/* Expanded Content - Only visible when expanded */}
+          {isExpanded && (
+            <>
+              <View style={styles.infoItemHorizontal}>
+                <AudioLines size={36} color={temaClima.textColor} />
+                <Text
+                  style={[styles.infoLabel, { color: temaClima.textColor }]}
+                >
+                  Som
+                </Text>
+                <Text
+                  style={[styles.infoValue, { color: temaClima.textColor }]}
+                >
+                  {data.sound} dB
+                </Text>
+              </View>
+
+              {history.length > 0 && (
+                <View style={styles.graphsContainer}>
                   <Text
-                    style={[styles.infoLabel, { color: temaClima.textColor }]}
+                    style={[styles.graphTitle, { color: temaClima.textColor }]}
+                  >
+                    Temperatura
+                  </Text>
+                  <LineChart
+                    data={{
+                      labels,
+                      datasets: [{ data: tempData.length ? tempData : [0] }],
+                    }}
+                    width={SCREEN_WIDTH - 40}
+                    height={180}
+                    chartConfig={chartConfig("#FF3B30")}
+                    bezier
+                    style={styles.chart}
+                  />
+
+                  <Text
+                    style={[styles.graphTitle, { color: temaClima.textColor }]}
+                  >
+                    Umidade
+                  </Text>
+                  <LineChart
+                    data={{
+                      labels,
+                      datasets: [{ data: humData.length ? humData : [0] }],
+                    }}
+                    width={SCREEN_WIDTH - 40}
+                    height={180}
+                    chartConfig={chartConfig("#37e2dc")}
+                    bezier
+                    style={styles.chart}
+                  />
+
+                  <Text
+                    style={[styles.graphTitle, { color: temaClima.textColor }]}
+                  >
+                    Luminosidade
+                  </Text>
+                  <LineChart
+                    data={{
+                      labels,
+                      datasets: [{ data: lightData.length ? lightData : [0] }],
+                    }}
+                    width={SCREEN_WIDTH - 40}
+                    height={180}
+                    chartConfig={chartConfig("#FFCC00")}
+                    bezier
+                    style={styles.chart}
+                  />
+
+                  <Text
+                    style={[styles.graphTitle, { color: temaClima.textColor }]}
                   >
                     Som
                   </Text>
-                  <Text
-                    style={[styles.infoValue, { color: temaClima.textColor }]}
-                  >
-                    {data.sound} dB
-                  </Text>
+                  <LineChart
+                    data={{
+                      labels,
+                      datasets: [{ data: soundData.length ? soundData : [0] }],
+                    }}
+                    width={SCREEN_WIDTH - 40}
+                    height={180}
+                    chartConfig={chartConfig("#AF52DE")}
+                    bezier
+                    style={styles.chart}
+                  />
                 </View>
-
-                {history.length > 0 && (
-                  <View style={styles.graphsContainer}>
-                    <Text
-                      style={[
-                        styles.graphTitle,
-                        { color: temaClima.textColor },
-                      ]}
-                    >
-                      Temperatura
-                    </Text>
-                    <LineChart
-                      data={{
-                        labels,
-                        datasets: [{ data: tempData.length ? tempData : [0] }],
-                      }}
-                      width={SCREEN_WIDTH - 40}
-                      height={180}
-                      chartConfig={chartConfig("#FF3B30")}
-                      bezier
-                      style={styles.chart}
-                    />
-
-                    <Text
-                      style={[
-                        styles.graphTitle,
-                        { color: temaClima.textColor },
-                      ]}
-                    >
-                      Umidade
-                    </Text>
-                    <LineChart
-                      data={{
-                        labels,
-                        datasets: [{ data: humData.length ? humData : [0] }],
-                      }}
-                      width={SCREEN_WIDTH - 40}
-                      height={180}
-                      chartConfig={chartConfig("#37e2dc")}
-                      bezier
-                      style={styles.chart}
-                    />
-
-                    <Text
-                      style={[
-                        styles.graphTitle,
-                        { color: temaClima.textColor },
-                      ]}
-                    >
-                      Luminosidade
-                    </Text>
-                    <LineChart
-                      data={{
-                        labels,
-                        datasets: [
-                          { data: lightData.length ? lightData : [0] },
-                        ],
-                      }}
-                      width={SCREEN_WIDTH - 40}
-                      height={180}
-                      chartConfig={chartConfig("#FFCC00")}
-                      bezier
-                      style={styles.chart}
-                    />
-
-                    <Text
-                      style={[
-                        styles.graphTitle,
-                        { color: temaClima.textColor },
-                      ]}
-                    >
-                      Som
-                    </Text>
-                    <LineChart
-                      data={{
-                        labels,
-                        datasets: [
-                          { data: soundData.length ? soundData : [0] },
-                        ],
-                      }}
-                      width={SCREEN_WIDTH - 40}
-                      height={180}
-                      chartConfig={chartConfig("#AF52DE")}
-                      bezier
-                      style={styles.chart}
-                    />
-                  </View>
-                )}
-              </>
-            )}
-          </ScrollView>
-        </Animated.View>
-      </GestureDetector>
+              )}
+            </>
+          )}
+        </ScrollView>
+      </Animated.View>
     </View>
   );
 }
@@ -542,7 +492,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   logo: { width: 50, height: 50 },
-  centerContent: { flex: 1, justifyContent: "center", alignItems: "center" },
+  centerContent: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    left: 0,
+    right: 0,
+    top: 200,
+  },
   circleClima: {
     width: 200,
     height: 200,
