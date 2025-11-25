@@ -32,8 +32,8 @@ module.exports = {
     scheme: "dashboardindustrial",
     web: {
       favicon: "./assets/favicon.png",
-      
-      bundler: "metro", 
+
+      bundler: "metro",
     },
     extra: {
       eas: {
